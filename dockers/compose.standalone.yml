@@ -1,0 +1,55 @@
+# 서비스 하나만 독립 컨테이너로 띄우는 용도. api 와 web 을 서로 다른 서버에 나눠 띄울 때 쓴다.
+#   yarn docker:up:<서비스>:<환경> (README 의 도커 절 참고)
+#
+# compose.yml 과 달리 postgres 를 띄우지 않고, 다른 서비스와 네트워크도 나누지 않는다.
+# 그래서 DB_HOST · API_INTERNAL_URL · API_TRUST_PROXY 는 env 파일 값을 그대로 쓴다. 컨테이너 밖에서 닿는 주소를 넣어야 한다.
+# 서비스마다 -p 로 프로젝트 이름을 따로 줘, 하나를 내리거나 다시 띄워도 다른 서비스에 영향이 없게 한다.
+#
+# compose.yml 이 이 파일의 서비스를 extends 로 가져다 쓴다. 서비스 정의(빌드 · env 파일 · 포트 · 볼륨)는 여기서만 고친다.
+name: fms-java-standalone
+
+x-env-file: &env-file
+  - ../${FMS_ENV_FILE:?FMS_ENV_FILE 에 env 파일 이름을 지정하세요. README 의 도커 절 참고}
+
+# 같은 호스트의 DB · api 에 닿을 때 host.docker.internal 을 쓸 수 있게 한다. (리눅스는 기본으로 없어 직접 이어 준다)
+x-extra-hosts: &extra-hosts
+  - host.docker.internal:host-gateway
+
+# 아래 environment 는 컨테이너 안 경로 · 포트라 env 파일과 무관하게 고정한다. 같은 이름이면 env 파일 값보다 우선한다.
+x-api-env: &api-env
+  API_PORT: "4000"
+  STORAGE_DIR: /data/storage
+
+services:
+  migrator:
+    build: { context: .., dockerfile: dockers/api/Dockerfile }
+    env_file: *env-file
+    environment: *api-env
+    extra_hosts: *extra-hosts
+    command: ["sh", "/app/dockers/scripts/run-migrations.sh"]
+
+  api:
+    build: { context: .., dockerfile: dockers/api/Dockerfile }
+    env_file: *env-file
+    environment: *api-env
+    extra_hosts: *extra-hosts
+    ports: ["4000:4000"]
+    volumes:
+      - fms-storage:/data/storage
+    depends_on:
+      migrator: { condition: service_completed_successfully }
+
+  admin-web:
+    build: { context: .., dockerfile: dockers/admin-web/Dockerfile }
+    env_file: *env-file
+    extra_hosts: *extra-hosts
+    ports: ["3000:3000"]
+
+  user-web:
+    build: { context: .., dockerfile: dockers/user-web/Dockerfile }
+    env_file: *env-file
+    extra_hosts: *extra-hosts
+    ports: ["3001:3001"]
+
+volumes:
+  fms-storage:

@@ -1,0 +1,31 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "incremental": false,
+    "plugins": [],
+    "types": ["node"]
+  },
+  "include": ["./**/*.ts", "../playwright.config.ts"],
+  "exclude": [],
+  "references": [
+    {
+      "path": "../../../libs/web-shared/api-schemas"
+    },
+    {
+      "path": "../../../libs/web-shared/consts"
+    },
+    {
+      "path": "../../../libs/web-shared/error-provider"
+    },
+    {
+      "path": "../../../libs/web-shared/types"
+    },
+    {
+      "path": "../../../libs/web-shared/web-ui"
+    },
+    {
+      "path": "../../../libs/web-shared/web-utils"
+    }
+  ]
+}

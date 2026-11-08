@@ -1,0 +1,37 @@
+{
+  "name": "@fms/user-web",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node ../../scripts/run-with-root-env.mjs next dev --port 3001",
+    "build": "node ../../scripts/run-with-root-env.mjs next build",
+    "start": "node ../../scripts/run-with-root-env.mjs next start --port 3001",
+    "type:check": "next typegen && tsc --noEmit && tsc --noEmit -p ./e2e/tsconfig.json",
+    "lint:check": "biome check",
+    "lint:format": "biome check --write",
+    "e2e": "playwright test"
+  },
+  "dependencies": {
+    "@fms/api-schemas": "workspace:^",
+    "@fms/consts": "workspace:^",
+    "@fms/error-provider": "workspace:^",
+    "@fms/types": "workspace:^",
+    "@fms/web-ui": "workspace:^",
+    "@fms/web-utils": "workspace:^",
+    "next": "16.4.5",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.6.5",
+    "@fms/biome-config": "workspace:^",
+    "@playwright/test": "1.65.0",
+    "@tailwindcss/postcss": "4.3.4",
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "tailwindcss": "4.3.4",
+    "typescript": "7.0.2"
+  }
+}

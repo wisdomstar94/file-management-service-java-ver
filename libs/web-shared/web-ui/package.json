@@ -1,0 +1,42 @@
+{
+  "name": "@fms/web-ui",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "EMPTY_OUT_DIR=true vite build",
+    "watch": "vite build --watch",
+    "type:check": "tsc --noEmit",
+    "lint:check": "biome check",
+    "lint:format": "biome check --write"
+  },
+  "peerDependencies": {
+    "react": "19.3.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.6.5",
+    "@fms/biome-config": "workspace:^",
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "react": "19.3.1",
+    "typescript": "7.0.2",
+    "vite": "8.3.6"
+  },
+  "exports": {
+    "./components/*": {
+      "require": {
+        "types": "./dist/components/*/index.d.ts",
+        "default": "./dist/components/*/index.cjs"
+      },
+      "import": {
+        "types": "./dist/components/*/index.d.ts",
+        "default": "./dist/components/*/index.mjs"
+      }
+    },
+    "./styles/*": "./src/styles/*"
+  }
+}

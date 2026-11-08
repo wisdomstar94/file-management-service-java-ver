@@ -1,0 +1,13 @@
+{
+  "root": true,
+  "extends": ["@fms/biome-config/biome.common.json"],
+  "plugins": ["./libs/internal/biome-config/src/no-derived-alias.grit"],
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "includes": ["**", "!**/*.md"]
+  }
+}

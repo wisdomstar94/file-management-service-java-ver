@@ -1,0 +1,21 @@
+# 서버(Java) 의존성 버전. Spring Boot BOM 이 관리하는 라이브러리(Hibernate · Flyway · Jackson · PostgreSQL JDBC 등)는 버전을 적지 않는다.
+[versions]
+java = "25"
+spring-boot = "4.1.2"
+nimbus-jose-jwt = "10.10"
+bouncycastle = "1.86"
+lombok = "1.18.48"
+testcontainers = "2.0.5"
+spotless = "8.11.0"
+palantir-java-format = "2.103.0"
+
+[libraries]
+spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
+testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers" }
+nimbus-jose-jwt = { module = "com.nimbusds:nimbus-jose-jwt", version.ref = "nimbus-jose-jwt" }
+bouncycastle = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

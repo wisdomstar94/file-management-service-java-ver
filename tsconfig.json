@@ -1,0 +1,38 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./libs/web-shared/api-schemas"
+    },
+    {
+      "path": "./libs/web-shared/common-utils"
+    },
+    {
+      "path": "./libs/web-shared/consts"
+    },
+    {
+      "path": "./libs/web-shared/error-provider"
+    },
+    {
+      "path": "./libs/web-shared/jwt-handler"
+    },
+    {
+      "path": "./libs/web-shared/types"
+    },
+    {
+      "path": "./libs/web-shared/web-ui"
+    },
+    {
+      "path": "./libs/web-shared/web-utils"
+    },
+    {
+      "path": "./webs/file-management-service-admin"
+    },
+    {
+      "path": "./webs/file-management-service-user"
+    },
+    {
+      "path": "./e2e/api-e2e"
+    }
+  ]
+}

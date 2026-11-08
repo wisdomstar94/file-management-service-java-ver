@@ -1,0 +1,56 @@
+{
+  "name": "@fms/web-utils",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "EMPTY_OUT_DIR=true vite build",
+    "watch": "vite build --watch",
+    "type:check": "tsc --noEmit",
+    "lint:check": "biome check",
+    "lint:format": "biome check --write"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.6.5",
+    "@fms/biome-config": "workspace:^",
+    "@types/node": "26.6.6",
+    "typescript": "7.0.2",
+    "vite": "8.3.6"
+  },
+  "exports": {
+    "./formats/*": {
+      "require": {
+        "types": "./dist/formats/*/index.d.ts",
+        "default": "./dist/formats/*/index.cjs"
+      },
+      "import": {
+        "types": "./dist/formats/*/index.d.ts",
+        "default": "./dist/formats/*/index.mjs"
+      }
+    },
+    "./files/*": {
+      "require": {
+        "types": "./dist/files/*/index.d.ts",
+        "default": "./dist/files/*/index.cjs"
+      },
+      "import": {
+        "types": "./dist/files/*/index.d.ts",
+        "default": "./dist/files/*/index.mjs"
+      }
+    },
+    "./requests/*": {
+      "require": {
+        "types": "./dist/requests/*/index.d.ts",
+        "default": "./dist/requests/*/index.cjs"
+      },
+      "import": {
+        "types": "./dist/requests/*/index.d.ts",
+        "default": "./dist/requests/*/index.mjs"
+      }
+    }
+  }
+}

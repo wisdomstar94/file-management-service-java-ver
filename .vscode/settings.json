@@ -1,0 +1,33 @@
+{
+  "editor.defaultFormatter": "biomejs.biome",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports.biome": "explicit",
+    "source.fixAll.biome": "explicit"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": null,
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports.biome": "never",
+      "source.fixAll.biome": "never"
+    }
+  },
+  // Java 는 biome 가 아니라 Spotless(palantir-java-format) 로 맞춘다. 저장 시 자동 포맷은 끄고 `yarn lint:format` 으로 맞춘다.
+  "[java]": {
+    "editor.defaultFormatter": "redhat.java",
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports.biome": "never",
+      "source.fixAll.biome": "never"
+    }
+  },
+  // 서버는 Gradle 멀티 프로젝트(settings.gradle.kts)로 연다. Java 25 런타임(java.configuration.runtimes)은 사용자 설정에 등록한다.
+  "java.import.gradle.enabled": true,
+  "java.import.maven.enabled": false,
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.compile.nullAnalysis.mode": "disabled",
+  "files.exclude": {
+    "**/.gradle": true
+  }
+}

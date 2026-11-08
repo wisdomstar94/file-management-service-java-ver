@@ -1,0 +1,4 @@
+{
+  "ADMIN_ACCESS_TOKEN_COOKIE": "fms_admin_at",
+  "ADMIN_REFRESH_TOKEN_COOKIE": "fms_admin_rt"
+}

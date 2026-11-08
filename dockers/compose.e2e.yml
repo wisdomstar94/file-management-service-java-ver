@@ -1,0 +1,92 @@
+# e2e 전용 격리 환경. DB 는 tmpfs 라 매번 빈 상태에서 시작한다. 실행은 scripts/run-e2e.sh 로 한다.
+# 환경변수는 모든 서비스가 루트 .env.e2e 에서 읽는다.
+name: fms-java-e2e
+
+x-e2e-env-file: &e2e-env-file [../.env.e2e]
+
+# 도커 서비스 이름끼리는 서로 다른 사이트라 브라우저가 쿠키를 주고받지 못한다.
+# 그래서 api 와 web 에 fms.test 하위 별칭을 붙이고, .env.e2e 의 COOKIE_DOMAIN · 주소도 이 별칭으로 맞춘다.
+
+x-healthcheck: &http-healthcheck
+  interval: 2s
+  timeout: 3s
+  retries: 60
+
+networks:
+  e2e:
+    ipam:
+      config:
+        - subnet: 172.31.250.0/24
+
+services:
+  postgres:
+    image: postgres:18.6
+    networks: [e2e]
+    env_file: *e2e-env-file
+    # postgres 이미지는 POSTGRES_* 이름만 읽어, 값은 .env.e2e 의 DB_* 에 두고 이름만 이어 준다.
+    # ${...} 는 scripts/run-e2e.sh 가 넘기는 --env-file .env.e2e 로 채워진다.
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    tmpfs: [/var/lib/postgresql]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  migrator:
+    build: { context: .., dockerfile: dockers/api/Dockerfile }
+    networks: [e2e]
+    env_file: *e2e-env-file
+    command: ["sh", "/app/dockers/scripts/run-migrations.sh"]
+    depends_on:
+      postgres: { condition: service_healthy }
+
+  api:
+    build: { context: .., dockerfile: dockers/api/Dockerfile }
+    networks:
+      e2e: { aliases: [api.fms.test] }
+    env_file: *e2e-env-file
+    tmpfs: [/data/storage]
+    healthcheck:
+      <<: *http-healthcheck
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:4000/api/health"]
+    depends_on:
+      migrator: { condition: service_completed_successfully }
+
+  admin-web:
+    build: { context: .., dockerfile: dockers/admin-web/Dockerfile }
+    networks:
+      e2e: { aliases: [admin.fms.test] }
+    env_file: *e2e-env-file
+    healthcheck:
+      <<: *http-healthcheck
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/forbidden').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"]
+    depends_on:
+      api: { condition: service_healthy }
+
+  user-web:
+    build: { context: .., dockerfile: dockers/user-web/Dockerfile }
+    networks:
+      e2e: { aliases: [user.fms.test] }
+    env_file: *e2e-env-file
+    healthcheck:
+      <<: *http-healthcheck
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/s/healthcheck').then(()=>process.exit(0),()=>process.exit(1))"]
+    depends_on:
+      api: { condition: service_healthy }
+
+  e2e-servers:
+    profiles: [runner]
+    build: { context: .., dockerfile: dockers/e2e/Dockerfile, target: e2e-servers }
+    networks: [e2e]
+    env_file: *e2e-env-file
+
+  e2e-webs:
+    profiles: [runner]
+    build: { context: .., dockerfile: dockers/e2e/Dockerfile, target: e2e-webs }
+    networks: [e2e]
+    ipc: host
+    env_file: *e2e-env-file

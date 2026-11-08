@@ -1,0 +1,38 @@
+# dependencies
+node_modules
+.yarn/*
+!.yarn/releases
+.pnp.*
+
+# build
+dist
+.next/
+out/
+**/*.tsbuildinfo
+next-env.d.ts
+
+# testing
+coverage
+test-results/
+playwright-report/
+
+# env
+.env*
+!.env*-sample
+# e2e 전용 테스트 값이라 저장소에 올린다.
+!.env.e2e
+
+# misc
+.DS_Store
+*.pem
+logs
+.claude
+
+# uploaded files (local)
+storage/
+
+# gradle
+.gradle/
+**/build/
+!**/src/**/build/
+.kotlin/

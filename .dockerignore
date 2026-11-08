@@ -1,0 +1,15 @@
+**/node_modules
+**/dist
+**/.next
+**/test-results
+**/playwright-report
+**/storage
+**/*.tsbuildinfo
+**/build
+.gradle
+**/.gradle
+.git
+.env*
+!.env*-sample
+logs
+.claude

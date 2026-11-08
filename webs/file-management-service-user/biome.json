@@ -1,0 +1,5 @@
+{
+  "root": false,
+  "extends": ["@fms/biome-config/biome.common.json"],
+  "plugins": ["../../libs/internal/biome-config/src/no-derived-alias.grit"]
+}

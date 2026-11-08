@@ -1,0 +1,56 @@
+{
+  "name": "@fms/error-provider",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
+  "scripts": {
+    "build": "EMPTY_OUT_DIR=true vite build",
+    "watch": "vite build --watch",
+    "type:check": "tsc --noEmit",
+    "lint:check": "biome check",
+    "lint:format": "biome check --write"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.6.5",
+    "@fms/biome-config": "workspace:^",
+    "@types/node": "26.6.6",
+    "typescript": "7.0.2",
+    "vite": "8.3.6"
+  },
+  "exports": {
+    "./errors/*": {
+      "require": {
+        "types": "./dist/errors/*/index.d.ts",
+        "default": "./dist/errors/*/index.cjs"
+      },
+      "import": {
+        "types": "./dist/errors/*/index.d.ts",
+        "default": "./dist/errors/*/index.mjs"
+      }
+    },
+    "./consts/*": {
+      "require": {
+        "types": "./dist/consts/*/index.d.ts",
+        "default": "./dist/consts/*/index.cjs"
+      },
+      "import": {
+        "types": "./dist/consts/*/index.d.ts",
+        "default": "./dist/consts/*/index.mjs"
+      }
+    },
+    "./types/*": {
+      "require": {
+        "types": "./dist/types/*/index.d.ts",
+        "default": "./dist/types/*/index.cjs"
+      },
+      "import": {
+        "types": "./dist/types/*/index.d.ts",
+        "default": "./dist/types/*/index.mjs"
+      }
+    }
+  }
+}

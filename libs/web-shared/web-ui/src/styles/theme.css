@@ -1,0 +1,43 @@
+/* admin-web · user-web 공용 디자인 토큰 (시안 색상 · 글꼴) */
+@theme {
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-primary: #4f5bd5;
+  --color-primary-hover: #3a45b8;
+  --color-primary-soft: #eef0fc;
+  --color-primary-softer: #f5f6fe;
+  --color-primary-row: #f8f9fe;
+
+  --color-ink: #14171f;
+  --color-ink-2: #272c36;
+  --color-sub: #5b6270;
+  --color-muted: #6b7280;
+  --color-faint: #8a909c;
+  --color-faint-2: #9aa0ab;
+  --color-disabled: #b0b5bf;
+  --color-toggle-off: #d5d9e0;
+  --color-line-dashed: #cfd4dc;
+
+  --color-canvas: #f5f6f8;
+  --color-surface-sub: #fafbfc;
+  --color-field: #f8f9fb;
+  --color-disabled-bg: #f6f7f9;
+  --color-chip: #f1f2f6;
+
+  --color-line: #e6e8ec;
+  --color-line-input: #e1e4e9;
+  --color-line-soft: #eef0f3;
+  --color-line-table: #eceef2;
+  --color-line-row: #f0f1f4;
+
+  --color-danger: #d64545;
+  --color-danger-line: #f1cccc;
+  --color-danger-soft: #fdecec;
+  --color-success: #1a8a5d;
+  --color-success-soft: #e7f6ef;
+  --color-warn: #9a6512;
+  --color-warn-soft: #fdf4e3;
+  --color-code-bg: #14171f;
+  --color-code-fg: #e8eaf0;
+}

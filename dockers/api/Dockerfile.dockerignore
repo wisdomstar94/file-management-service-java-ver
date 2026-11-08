@@ -1,0 +1,26 @@
+# api 이미지에는 Gradle 빌드에 필요한 것(gradle wrapper · libs/contracts · libs/server-shared · servers)만 있으면 된다.
+webs
+libs/web-shared
+libs/internal
+e2e
+docs
+scripts
+node_modules
+.yarn
+
+# 아래 공통 규칙(루트 .dockerignore 와 같음)
+**/node_modules
+**/dist
+**/.next
+**/test-results
+**/playwright-report
+**/storage
+**/*.tsbuildinfo
+**/build
+.gradle
+**/.gradle
+.git
+.env*
+!.env*-sample
+logs
+.claude

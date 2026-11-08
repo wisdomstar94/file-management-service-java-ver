@@ -1,0 +1,63 @@
+# 전체 서비스를 한 호스트에 함께 띄우는 용도. postgres 는 compose.postgres.yml 에서 가져온다.
+#   yarn docker:up:all:<환경> (README 의 도커 절 참고)
+#
+# 서비스 정의(빌드 · env 파일 · 포트 · 볼륨)는 compose.standalone.yml 을 extends 로 가져다 쓰고,
+# 여기서는 함께 띄울 때만 필요한 것(postgres · 서비스 간 네트워크 · 컨테이너 주소)만 덧붙인다.
+# 컨테이너 환경변수 파일은 FMS_ENV_FILE 로 고르며 필수다.
+# compose.postgres.yml 의 ${DB_*} 는 --env-file 로 채우므로 --env-file 에도 같은 파일을 넘겨야 한다.
+name: fms-java
+
+include:
+  - compose.postgres.yml
+
+# 아래 environment 는 서비스끼리 컨테이너 주소로 닿아야 해서 고정한다. 같은 이름이면 env 파일 값보다 우선한다.
+x-api-env: &api-env
+  DB_HOST: postgres
+  DB_PORT: "5432"
+  # web 컨테이너가 넘긴 X-Forwarded-For 만 믿는다. 브라우저가 api 에 직접 보낸 헤더는 무시해야 해서
+  # 사설 대역 전체가 아니라 web 컨테이너의 고정 IP 만 지정한다. (아래 web-api 네트워크 참고)
+  API_TRUST_PROXY: 172.31.240.10, 172.31.240.11
+
+x-web-env: &web-env
+  # web 서버가 api 를 호출할 주소. 컨테이너끼리는 도커 서비스 이름으로 닿는다.
+  API_INTERNAL_URL: http://api:4000
+
+services:
+  migrator:
+    extends: { file: compose.standalone.yml, service: migrator }
+    environment: *api-env
+    depends_on:
+      postgres: { condition: service_healthy }
+
+  api:
+    extends: { file: compose.standalone.yml, service: api }
+    environment: *api-env
+    networks: [default, web-api]
+
+  admin-web:
+    extends: { file: compose.standalone.yml, service: admin-web }
+    environment: *web-env
+    networks:
+      web-api: { ipv4_address: 172.31.240.10 }
+    depends_on: [api]
+
+  user-web:
+    extends: { file: compose.standalone.yml, service: user-web }
+    environment: *web-env
+    networks:
+      web-api: { ipv4_address: 172.31.240.11 }
+    depends_on: [api]
+
+networks:
+  # web → api 호출 전용. API_TRUST_PROXY 가 가리키는 web 고정 IP 를 여기서 준다.
+  # 자동 할당은 ip_range(.128~)에서만 하게 해 고정 IP 와 겹치지 않게 한다.
+  # postgres 단독 실행(compose.postgres.yml)도 default 네트워크를 쓰므로 그쪽은 건드리지 않는다.
+  web-api:
+    ipam:
+      config:
+        - subnet: 172.31.240.0/24
+          ip_range: 172.31.240.128/25
+
+# extends 는 볼륨 선언까지 가져오지 않아 api 가 쓰는 볼륨을 여기서도 선언한다.
+volumes:
+  fms-storage:

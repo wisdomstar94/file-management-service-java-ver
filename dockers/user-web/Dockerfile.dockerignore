@@ -1,0 +1,25 @@
+# 이 web 이미지에는 서버 · 다른 web 소스가 필요 없다. yarn 이 워크스페이스를 찾도록 package.json 만 남긴다.
+servers
+libs/server-shared
+libs/contracts
+gradle
+webs/**
+!webs/*/package.json
+!webs/file-management-service-user
+
+# 아래 공통 규칙(루트 .dockerignore 와 같음)은 위의 ! 예외보다 뒤에 둬야 node_modules · .next 등이 다시 빠진다.
+**/node_modules
+**/dist
+**/.next
+**/test-results
+**/playwright-report
+**/storage
+**/*.tsbuildinfo
+**/build
+.gradle
+**/.gradle
+.git
+.env*
+!.env*-sample
+logs
+.claude

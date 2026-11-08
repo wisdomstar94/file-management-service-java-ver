@@ -1,0 +1,28 @@
+// 상수 · 타입에서 뽑은 타입 · 값에 이름만 붙여 다시 내보내는 코드를 막는다.
+// 예: `type PermissionCode = keyof typeof PERMISSION_CODE_REGISTRY`, `type IpBlock = Extract<EditorBlock, { kind: "IP" }>`
+// 사용처에서 `keyof typeof X` · `Extract<X, ...>` · `Object.keys(X)` 처럼 직접 쓴다.
+// 각 biome.json 의 `plugins` 에 자기 위치 기준 상대 경로로 등록한다. (공용 설정에 두면 extends 한 쪽 위치 기준으로 풀려 경로가 깨진다)
+language js(typescript)
+
+or {
+  TsTypeAliasDeclaration() as $alias where {
+    $alias <: r"(?s)type\s+\w+\s*=\s*(?:keyof\s|typeof\s|\(typeof\s|(?:Extract|Exclude|Pick|Omit|Partial|Required|Readonly|NonNullable|ReturnType|Parameters|Awaited|InstanceType)\s*<|z\.(?:infer|input|output)\s*<|\w+(?:\.\w+)*(?:<.*>)?\s*\[).*",
+    // `Omit<A, "x"> & { ... }` 처럼 다른 타입과 합친 정의는 별칭이 아니므로 제외한다.
+    $alias <: not r"(?s).*[>\])]\s*[&|].*",
+    register_diagnostic(span=$alias, message="다른 상수 · 타입에서 뽑은 타입에 이름만 붙인 별칭은 금지입니다. 사용처에서 keyof typeof X · Extract<X, ...> 처럼 직접 쓰세요.")
+  },
+  `Object.$method($source)` as $call where {
+    $method <: or {
+      `keys`,
+      `values`,
+      `entries`
+    },
+    $source <: r"[A-Z][A-Z0-9_]*",
+    $call <: within JsVariableDeclarator(),
+    $call <: not within or {
+      JsFunctionBody(),
+      JsArrowFunctionExpression()
+    },
+    register_diagnostic(span=$call, message="상수를 가공한 값을 모듈 최상위 상수로 다시 만들지 마세요. 사용처에서 Object.keys(X) 처럼 직접 쓰세요.")
+  }
+}
