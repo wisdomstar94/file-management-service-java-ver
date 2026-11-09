@@ -35,4 +35,7 @@ storage/
 .gradle/
 **/build/
 !**/src/**/build/
+# IDE(VS Code Java 확장) 빌드 산출물
+/servers/*/bin/
+/libs/server-shared/*/bin/
 .kotlin/

@@ -4,7 +4,7 @@
 
 | 파일 | 생성되는 TS (`@fms/consts`) | 생성되는 Java (`libs/server-shared/server-consts`) |
 | --- | --- | --- |
-| `permission-code-registry.json` | `PERMISSION_CODE_REGISTRY` | `PermissionCode` enum · `PermissionCodeRegistry` |
+| `permission-code-registry.json` | `PERMISSION_CODE_REGISTRY` | `PermissionCode` enum |
 | `api-error-code.json` | `API_ERROR_CODE` | `ApiErrorCode` enum |
 | `admin-auth-cookie-names.json` | `ADMIN_ACCESS_TOKEN_COOKIE` · `ADMIN_REFRESH_TOKEN_COOKIE` | `AdminAuthCookieNames` |
 | `access-policy-tree-max-depth.json` | `ACCESS_POLICY_TREE_MAX_DEPTH` | `AccessPolicyTreeMaxDepth` |

@@ -20,7 +20,7 @@ public class UploadedVersionSaver {
 
     /**
      * 업로드된 파일을 저장소로 옮기고 버전 행을 만든다. 등록 순서(seq)는 그 자료의 마지막 값 + 1.
-     * 트랜잭션 안에서 부르며, DB 저장이 실패하면 옮긴 파일을 지운다.
+     * 트랜잭션 안에서 부르며, 버전 행의 flush 가 실패하면 옮긴 파일을 지운다. (그 뒤 커밋이 실패하면 파일은 남는다)
      */
     @Transactional(propagation = Propagation.MANDATORY)
     public DocumentVersionEntity save(UUID documentId, String versionName, MultipartFile file) {

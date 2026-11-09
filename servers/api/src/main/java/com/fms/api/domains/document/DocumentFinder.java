@@ -27,7 +27,7 @@ public class DocumentFinder {
         return new DocumentWithVersions(document, versions);
     }
 
-    /** 자료의 버전 하나. 자료가 없거나 그 자료의 버전이 아니면 404. */
+    /** 읽어 둔 자료의 버전 하나. 그 자료의 버전이 아니면 404. */
     public DocumentVersionEntity findVersionOrThrow(DocumentWithVersions document, UUID versionId) {
         return document.versions().stream()
                 .filter(version -> version.getId().equals(versionId))

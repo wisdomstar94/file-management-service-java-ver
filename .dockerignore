@@ -6,6 +6,8 @@
 **/storage
 **/*.tsbuildinfo
 **/build
+servers/*/bin
+libs/server-shared/*/bin
 .gradle
 **/.gradle
 .git

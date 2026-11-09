@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 /**
- * 계정 생성 · 수정. 생성은 {@link #CREATE} 그룹으로 필수 값까지 검사한다. 수정에서 비밀번호는 바꿀 때만 보낸다.
+ * 계정 생성 · 수정. 생성의 필수 값은 AccountsController 가 따로 검사한다. 수정에서 비밀번호는 바꿀 때만 보낸다.
  * {@code memo} 는 생략하면 빈 문자열이다. (원본 zod {@code .default("")} 가 수정에도 적용되는 동작을 그대로 따른다)
  */
 record AdminAccountRequest(

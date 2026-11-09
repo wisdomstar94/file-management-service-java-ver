@@ -247,11 +247,11 @@ api 를 고칠 수 없다면 **"진행 중 갱신 공유 + 캐시" + "미리 갱
 | --- | --- | --- |
 | 토큰 저장 | httpOnly 쿠키. 브라우저 스크립트는 토큰을 보지 않음 | api 로그인 · 관리자 웹 서버 |
 | 갱신 주체 | 관리자 웹 서버의 `proxy.ts` 가 요청마다 판단 | `webs/file-management-service-admin/src/proxy.ts` |
-| RT 처리 | rotation + 유예 시간(case 4) + 재사용 감지 시 계열 폐기(case 5) | `servers/api/.../refresh-admin-tokens/` |
+| RT 처리 | rotation + 유예 시간(case 4) + 재사용 감지 시 계열 폐기(case 5) | `servers/api/.../routes/admin/auth/AdminAuthService.java` |
 | 미리 갱신 | AT 만료 N초 전부터 갱신. 실패하면 아직 유효한 기존 AT 로 진행 | `resolve-admin-access-token.ts` |
-| RT 만료 | 슬라이딩 (갱신할 때마다 `ADMIN_REFRESH_TOKEN_DAYS` 로 다시 계산) | `issue-admin-tokens.ts` |
+| RT 만료 | 슬라이딩 (갱신할 때마다 `ADMIN_REFRESH_TOKEN_DAYS` 로 다시 계산) | `AdminAuthService.issueTokens()` |
 | 중복 로그인 | 허용. 기기마다 계열이 따로 있음 | |
-| 쓴 RT 행 | 재사용 감지를 위해 만료 시각까지 보관. 발급할 때 그 계정의 만료된 행을 지움 | `issue-admin-tokens.ts` |
+| 쓴 RT 행 | 재사용 감지를 위해 만료 시각까지 보관. 발급할 때 그 계정의 만료된 행을 지움 | `AdminAuthService.issueTokens()` |
 
 환경변수
 
@@ -269,7 +269,7 @@ api 를 고칠 수 없다면 **"진행 중 갱신 공유 + 캐시" + "미리 갱
 
 알고 있는 한계
 
-- 계열이 폐기돼도 이미 발급된 AT 는 최대 15분(`ADMIN_ACCESS_TOKEN_EXPIRES_IN_SECONDS`) 동안 쓸 수 있습니다.
+- 계열이 폐기돼도 이미 발급된 AT 는 최대 15분(`AdminTokens.ADMIN_ACCESS_TOKEN_EXPIRES_IN_SECONDS` 상수. env 로 바꿀 수 없습니다) 동안 쓸 수 있습니다.
 - 유예 시간 안의 재사용은 탈취여도 통과합니다.
 - 갱신 응답이 유실된 뒤 유예 시간이 지나 옛 RT 로 갱신하면 그 기기는 로그아웃됩니다.
 - 서버 컴포넌트가 스트리밍 중에 api 401 을 받으면 재시도 없이 로그인 화면으로 이동합니다. 미리 갱신으로 거의 생기지 않게 했습니다.

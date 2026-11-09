@@ -22,7 +22,7 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import tools.jackson.core.JacksonException;
 
-/** 모든 실패 응답을 {@code { error: { code, message, details? } }} 로 맞춘다. (원본 global-error-middleware) */
+/** 모든 실패 응답을 {@code { error: { code, message, requestKey?, details? } }} 로 맞춘다. (원본 global-error-middleware) */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {

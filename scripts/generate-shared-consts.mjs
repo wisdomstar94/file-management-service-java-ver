@@ -31,7 +31,7 @@ const outputs = [
 /**
  * 코드가 실제로 검사하는 권한 코드 목록입니다.
  *
- * 여기에 있는 코드만 \`requirePermission\` · 메뉴 노출 판정에 쓸 수 있고, DB 의 권한은 시드가 이 목록으로만 추가합니다.
+ * 여기에 있는 코드만 api 의 \`@RequirePermission\` · 관리자 웹의 \`hasPermission\` · \`requirePagePermission\` · 메뉴 노출 판정에 쓸 수 있고, DB 의 권한은 시드가 이 목록으로만 추가합니다.
  * \`seed\` 는 DB 에 처음 넣을 분류·권한명입니다.
  */
 export const PERMISSION_CODE_REGISTRY = ${JSON.stringify(readContract("permission-code-registry.json"))} as const satisfies Record<string, { seed: { category: string; name: string } }>;

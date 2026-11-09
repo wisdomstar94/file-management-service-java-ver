@@ -1,5 +1,5 @@
 # 서비스 하나만 독립 컨테이너로 띄우는 용도. api 와 web 을 서로 다른 서버에 나눠 띄울 때 쓴다.
-#   yarn docker:up:<서비스>:<환경> (README 의 도커 절 참고)
+#   yarn docker:up:<서비스>:<환경> (docs/run-and-operation-guide.md 의 도커 절 참고)
 #
 # compose.yml 과 달리 postgres 를 띄우지 않고, 다른 서비스와 네트워크도 나누지 않는다.
 # 그래서 DB_HOST · API_INTERNAL_URL · API_TRUST_PROXY 는 env 파일 값을 그대로 쓴다. 컨테이너 밖에서 닿는 주소를 넣어야 한다.
@@ -9,7 +9,7 @@
 name: fms-java-standalone
 
 x-env-file: &env-file
-  - ../${FMS_ENV_FILE:?FMS_ENV_FILE 에 env 파일 이름을 지정하세요. README 의 도커 절 참고}
+  - ../${FMS_ENV_FILE:?FMS_ENV_FILE 에 env 파일 이름을 지정하세요. docs/run-and-operation-guide.md 의 도커 절 참고}
 
 # 같은 호스트의 DB · api 에 닿을 때 host.docker.internal 을 쓸 수 있게 한다. (리눅스는 기본으로 없어 직접 이어 준다)
 x-extra-hosts: &extra-hosts

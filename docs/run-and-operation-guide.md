@@ -87,11 +87,13 @@ docker compose -f dockers/compose.postgres.yml up -d
 
 yarn db:setup                                   # Flyway 마이그레이션 + 시드(최초 관리자 계정 포함)
 
-./gradlew :servers:api:bootRun                  # api (4000)
+yarn java:api:local:watch                       # api (4000). 마이그레이션 · 시드 없이 api 만 실행 (핫리로드)
+                                                # = yarn java:api:local (api 실행) + yarn java:api:watch (저장 시 다시 컴파일) 를 한 터미널에서
 yarn workspace @fms/admin-web dev
 yarn workspace @fms/user-web dev
 ```
 
+- `java:api:local` 은 `spring-boot-devtools` 를 넣어 띄워, `servers/api` 의 컴파일 결과(`build/classes` · `build/resources`)가 바뀌면 api 를 자동으로 재시작합니다. 컴파일은 `java:api:watch`(또는 `build/` 에 결과를 쓰는 IDE 빌드)가 합니다. VS Code Java 확장의 자동 빌드는 결과를 `bin/` 에 쓰므로 여기에 해당하지 않습니다. `java:api:local:watch` 는 둘을 함께 띄우고 `Ctrl+C` 로 함께 끝냅니다. `libs/server-shared/**` 는 jar 로 들어가 재시작 대상이 아니므로, 고친 뒤에는 다시 실행합니다.
 - Gradle 의 실행 태스크(`bootRun`)는 루트 env 파일을 환경변수로 읽습니다. 파일은 `FMS_ENV_FILE` 로 고르며 기본은 `.env.local` 이고, 이미 설정된 환경변수는 덮어쓰지 않습니다.
 - VS Code 에서 Java 코드를 열 때는 Java 확장에 JDK 25 런타임을 등록하세요. 사용자 설정(settings.json)의 `java.configuration.runtimes` 에 `JavaSE-25` 를 넣고 `Java: Clean Java Language Server Workspace` 를 한 번 실행합니다. Gradle 이 내려받은 JDK 경로는 `ls ~/.gradle/jdks` 로 확인합니다.
 
@@ -126,7 +128,7 @@ yarn db:setup                                     # migrate + seed
 ```
 
 - 엔티티는 `libs/server-shared/database-entities` (JPA) 에 있습니다. Flyway 는 엔티티 변경을 감지해 SQL 을 만들어 주지 않으므로, 엔티티를 고치면 같은 변경을 SQL 로 직접 씁니다. api 는 `ddl-auto=validate` 로 기동할 때 엔티티와 스키마가 맞는지 확인하므로, 빠뜨리면 api 가 뜨지 않습니다.
-- 파일명의 버전(13자리 timestamp)을 직접 짓지 말고 `db:new-migration` 으로 만듭니다. 이미 커밋한 마이그레이션 파일은 이름 · 내용을 바꾸지 않습니다(Flyway checksum 이 어긋나 migrate 가 멈춥니다). `yarn lint:check` 가 검사합니다.
+- 파일명의 버전(13자리 timestamp)을 직접 짓지 말고 `db:new-migration` 으로 만듭니다. 이미 커밋한 마이그레이션 파일은 이름 · 내용을 바꾸지 않습니다(Flyway checksum 이 어긋나 migrate 가 멈춥니다). `yarn lint:check` 는 파일명 형식 · 버전(둥근 값 · 미래 · 중복)과 커밋된 파일의 이름 변경 · 삭제를 검사하고, 내용 변경은 migrate 할 때 Flyway 가 막습니다.
 - 되돌리기(undo)는 Flyway Community 에 없습니다. 되돌릴 때는 되돌리는 내용의 새 마이그레이션을 만듭니다.
 
 ## 도커
@@ -140,7 +142,7 @@ yarn docker:up:all:production     # .env.production
 ```
 
 - 각 명령은 `FMS_ENV_FILE` 로 컨테이너에 넣을 env 파일을 고르고, 같은 파일을 `--env-file` 로도 넘깁니다(postgres 계정 설정용). `docker compose` 를 직접 실행할 때도 `FMS_ENV_FILE` 은 필수이며, 빠지면 compose 가 실행되지 않습니다.
-- env 파일은 저장소에 올라가지 않습니다(`.gitignore`). `.env.development` · `.env.production` 은 `.env.local-sample` 을 복사해 값을 바꿔 만드세요. 맨 위 `APP_ENV` 도 `development` · `production` 으로 바꿉니다.
+- env 파일은 저장소에 올라가지 않습니다(`.gitignore`). `.env.development` · `.env.production` 은 `.env.local-sample` 을 복사해 값을 바꿔 만드세요.
 - env 파일의 변수는 모두 컨테이너에 그대로 들어갑니다. 변수를 새로 추가해도 compose 는 고치지 않아도 됩니다.
 - 단, `DB_HOST` · `DB_PORT` · `API_PORT` · `STORAGE_DIR` · `API_TRUST_PROXY` · `API_INTERNAL_URL` 은 컨테이너 안에서 값이 달라야 해서 compose 가 고정하고, env 파일 값보다 우선합니다. (`API_PORT` · `STORAGE_DIR` 은 `dockers/compose.standalone.yml`, 나머지는 `dockers/compose.yml`)
 - `JWT_SECRET_ADMIN_ACCOUNT` · `JWT_SECRET_ADMIN_SHORT_TIME` · `JWT_SECRET_SHARE_LINK_UNLOCK` 은 필수입니다. 각각 관리자 access token · 업로드 · 다운로드용 short-time token · 공개 링크 잠금 해제 토큰의 서명 키이고, 매번 같은 값이어야 기존 로그인 · 잠금 해제가 유지됩니다. 운영에서는 각각 서로 다른 32자 이상의 임의 문자열로 바꾸세요.

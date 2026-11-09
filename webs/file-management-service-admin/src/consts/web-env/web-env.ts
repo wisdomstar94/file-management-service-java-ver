@@ -8,7 +8,7 @@ export const webEnv = {
   adminAccessTokenSecret: process.env.JWT_SECRET_ADMIN_ACCOUNT ?? "",
   /** access token 만료까지 이 시간(초)보다 적게 남으면 미리 갱신한다. 검증한 토큰이 api 호출 전에 만료되지 않게 한다. */
   accessTokenRefreshBeforeSeconds: Number(process.env.WEB_ACCESS_TOKEN_REFRESH_BEFORE_SECONDS ?? 60),
-  /** admin-web 앞단에 있는 신뢰할 수 있는 프록시 수. X-Forwarded-For 의 오른쪽에서 이만큼 건너뛴 값을 요청 IP 로 본다. */
+  /** admin-web 앞단에 있는 신뢰할 수 있는 프록시 수. X-Forwarded-For 의 오른쪽에서 이 번째 값을 요청 IP 로 본다(0 은 1 과 같이 맨 오른쪽 값). */
   trustedProxyHops: Number(process.env.WEB_TRUSTED_PROXY_HOPS ?? 0),
   isSecureCookie: process.env.WEB_SECURE_COOKIE === "true",
   /** 토큰 쿠키를 api 와 함께 쓸 상위 도메인. api 의 `COOKIE_DOMAIN` 과 같은 값이어야 한다. 비우면 호스트 한정 */

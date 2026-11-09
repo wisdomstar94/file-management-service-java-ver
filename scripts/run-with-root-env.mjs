@@ -7,7 +7,7 @@ import { existsSync } from "node:fs";
  * Next 는 실행 옵션을 worker 의 NODE_OPTIONS 로 넘기는데 `--env-file-if-exists` 는 NODE_OPTIONS 에 허용되지 않아 이 방식을 씁니다.
  *
  * @example node ../../scripts/run-with-root-env.mjs next build
- * @example FMS_ENV_FILE=.env.production node ../../scripts/run-with-root-env.mjs node ./dist/app.js
+ * @example FMS_ENV_FILE=.env.production node ../../scripts/run-with-root-env.mjs next start --port 3000
  */
 const envFile = new URL(`../${process.env.FMS_ENV_FILE || ".env.local"}`, import.meta.url);
 if (existsSync(envFile)) {

@@ -23,7 +23,7 @@ class DocumentListService {
     private final EntityManager entityManager;
     private final DocumentVersionQueryRepository versionRepository;
 
-    /** 등록일 최신순. 자료명 검색은 대소문자 구분 없이 부분 일치(ILIKE) 이다. */
+    /** 등록일 최신순. 자료명 검색은 대소문자 구분 없이 부분 일치(lower(..) LIKE) 이다. */
     @Transactional(readOnly = true)
     DocumentListResponse list(DocumentListQuery query) {
         StringBuilder where = new StringBuilder(" where 1 = 1");

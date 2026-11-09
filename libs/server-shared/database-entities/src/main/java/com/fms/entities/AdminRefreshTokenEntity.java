@@ -36,7 +36,7 @@ public class AdminRefreshTokenEntity {
     @Column(name = "expires_at", nullable = false)
     private Instant expiresAt;
 
-    /** 갱신에 쓴 시각. 동시에 들어온 갱신 요청을 받아 주려고 바로 지우지 않고 유예 시간 동안 남겨 둔다. */
+    /** 갱신에 쓴 시각. 유예 시간 안의 재사용은 동시 갱신으로 받아 주고 그 뒤의 재사용은 탈취로 보도록, 행을 만료될 때까지 남겨 둔다. */
     @Column(name = "used_at")
     private Instant usedAt;
 

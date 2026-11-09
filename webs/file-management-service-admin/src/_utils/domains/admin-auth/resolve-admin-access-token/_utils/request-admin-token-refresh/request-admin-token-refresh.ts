@@ -2,7 +2,7 @@ import { ADMIN_REFRESH_TOKEN_API } from "@fms/api-schemas/schemas/admin-auth-api
 import type { ResBody } from "@fms/api-schemas/types/api-schema-utils";
 import { fetchServerWrapper } from "@/wrappers/fetch-server-wrapper";
 
-/** refresh token 으로 새 토큰을 받는다. 만료 · 폐기 · 접근 정책 차단이면 `null` */
+/** refresh token 으로 새 토큰을 받는다. 실패하면(만료 · 폐기 · 접근 정책 차단 · 통신 오류 등) `null` */
 export async function requestAdminTokenRefresh(
   incoming: Headers,
   refreshToken: string,

@@ -38,6 +38,13 @@ spring:
   mvc:
     problemdetails:
       enabled: false
+  # devtools 는 yarn java:api:local(:watch) 에서만 classpath 에 들어간다. (servers/api/build.gradle.kts)
+  devtools:
+    # 개발용 기본 속성(에러 응답의 stacktrace 등)을 넣지 않는다. 응답이 운영 · e2e 와 같아야 한다.
+    add-properties: false
+    # api 는 브라우저 새로고침이 필요 없다.
+    livereload:
+      enabled: false
 fms:
   api:
     admin-access-token-secret: ${JWT_SECRET_ADMIN_ACCOUNT}

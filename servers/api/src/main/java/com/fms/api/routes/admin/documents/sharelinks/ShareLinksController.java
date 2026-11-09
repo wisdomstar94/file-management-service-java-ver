@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tools.jackson.databind.JsonNode;
 
-/** /api/admin/documents/:documentId/share-links/** */
+/** /api/admin/documents/{documentId}/share-links/** */
 @RestController
 @RequestMapping("/api/admin/documents/{documentId}/share-links")
 @RequiredArgsConstructor

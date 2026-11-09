@@ -19,7 +19,7 @@ import java.util.regex.PatternSyntaxException;
 import tools.jackson.databind.JsonNode;
 
 /**
- * 요청 본문의 접근 정책 조건 트리를 검증하며 {@link AccessPolicyNode} 로 바꾼다. 문자열은 앞뒤 공백을 지우고, 모르는 필드는 버린다.
+ * 요청 본문의 접근 정책 조건 트리를 검증하며 {@link AccessPolicyNode} 로 바꾼다. IP · CIDR 과 헤더 이름은 앞뒤 공백을 지우고(헤더 값은 그대로 둔다), 모르는 필드는 버린다.
  * 실패하면 원본(zod)과 같은 경로({@code ruleTree.children.0.cidrs.1})로 400 을 던진다.
  */
 final class AccessPolicyTreeParser {

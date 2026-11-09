@@ -36,7 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import tools.jackson.databind.JsonNode;
 
-/** /api/admin/documents/:documentId/versions/** */
+/** /api/admin/documents/{documentId}/versions/** */
 @RestController
 @RequestMapping("/api/admin/documents/{documentId}/versions")
 @RequiredArgsConstructor

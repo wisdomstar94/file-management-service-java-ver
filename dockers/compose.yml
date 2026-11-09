@@ -1,5 +1,5 @@
 # 전체 서비스를 한 호스트에 함께 띄우는 용도. postgres 는 compose.postgres.yml 에서 가져온다.
-#   yarn docker:up:all:<환경> (README 의 도커 절 참고)
+#   yarn docker:up:all:<환경> (docs/run-and-operation-guide.md 의 도커 절 참고)
 #
 # 서비스 정의(빌드 · env 파일 · 포트 · 볼륨)는 compose.standalone.yml 을 extends 로 가져다 쓰고,
 # 여기서는 함께 띄울 때만 필요한 것(postgres · 서비스 간 네트워크 · 컨테이너 주소)만 덧붙인다.
