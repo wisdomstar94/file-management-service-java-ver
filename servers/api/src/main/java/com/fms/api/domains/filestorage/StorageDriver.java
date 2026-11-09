@@ -37,6 +37,10 @@ public class StorageDriver {
         file.transferTo(target);
     }
 
+    public boolean exists(String key) {
+        return Files.isRegularFile(resolveKey(key));
+    }
+
     public InputStream openRead(String key) throws IOException {
         return Files.newInputStream(resolveKey(key));
     }

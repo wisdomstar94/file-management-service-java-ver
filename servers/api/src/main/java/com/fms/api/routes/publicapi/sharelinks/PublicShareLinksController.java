@@ -116,8 +116,10 @@ public class PublicShareLinksController {
             if (!isAllowedVersion) {
                 throw HttpError.notFound("버전");
             }
+            // 파일이 없어 못 받는 경우 다운로드 수가 차감되지 않도록 응답을 먼저 만든 뒤 차감한다.
+            ResponseEntity<StreamingResponseBody> response = versionFileResponses.send(version);
             downloadConsumer.consume(link.getId(), version.getId(), request.getRemoteAddr());
-            return versionFileResponses.send(version);
+            return response;
         } catch (HttpError error) {
             return redirectToShareLinkPage(shareLinkKey, error);
         }
